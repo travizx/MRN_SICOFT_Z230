@@ -166,17 +166,10 @@ public class ListenerPrincipal {
                         intiEnty.setDireItin("SUR");
                         intiEnty.setUsrModi("SICOFT");
                         intiEnty.setFchModi(new Date());
-                        //PONER FUNCION DEL PONY //CAMBIAR CUANDO SE TENGA BIEN SINCRONIZADA CON HIST_RECV_NAVe
-                        if(intiEnty.getSfruRuta().getIdRuta() == 1 ){//Compararlos para que sean diferente KM_Recorridos por RUTA
-                            intiEnty.setKmReco(27.8);
-                        }else if(intiEnty.getSfruRuta().getIdRuta() == 2 ){
-                            intiEnty.setKmReco(26.2);
-                        }else if(intiEnty.getSfruRuta().getIdRuta() == 3){
-                            intiEnty.setKmReco(24.6);
-                        }else{
-                            intiEnty.setKmReco(24.5);
-                        }
-                        //intiEnty.setKmReco(KilometrosRecorridos(T_CLOSE_DTO.getID_VEHI(), CATA_CERR) );
+                        //PONER FUNCION DEL PONY 
+                        intiEnty.setKmReco( 
+                                KilometrosRecorridos(intiEnty.getHoraSaliItin().getTime(), T_CLOSE_DTO.getHORA_RECV().getTime(), T_CLOSE_DTO.getID_VEHI())
+                        );
                         /////////////////////////
                         itinService.CerrarItinerario(intiEnty);
                         System.out.println("-----Se Cerro un ITIN:"+String.valueOf(intiEnty.getIdItin()));
@@ -280,122 +273,42 @@ public class ListenerPrincipal {
 
     }
     
-    public Double KilometrosRecorridos(Date salidaReal, Date llegadaReal,int ID_VEHI, int CATA_CERR) {
+    public static Double KilometrosRecorridos(Long salidaReal, Long llegadaReal, int ID_VEHI) {
         //KILOMETROS RECORRIDOS QUE REGRESA 
         double kilometrosReco = 0;
-        
-        Date hora1 = salidaReal;
-        Date hora2 = llegadaReal;
-
-        double suma = 0;
-        double suma2 = 0;
-
-        //Cuando el operador cierre el itinerario que acaba de cumplir, entonces tiene que tomar
-        //los datos de la hora real de salida y llegada y buscarlo en la tabla de historico de receptor de navegacion
-        //y hacer el calculo correspondiente.
-        int idVehiculo = ID_VEHI;//Paso ID VEHI
-//        SfpfItinService vehiIti = new SfpfItinService();
-//        List<SfpfItin> itemVehi = vehiIti.BuscarVehiPorID(idVehiculo);
-        
-
-        //busco en la tabla de itinerarios el id del vehiculo
-        //para obtener la hora real de salida y de llegada.
-        //System.out.println("Tamaño de la lista " +  itemVehi.size());
-        //Recorrer la lista que me de y obtener solo la informacion que necesito 
-//        for (int i = 0; i < itemVehi.size(); i++) {
-//            if (itemVehi.get(i).getHoraSaliRealItin() != null && itemVehi.get(i).getHoraLlegRealItin() != null
-//                    && itemVehi.get(i).getIdEsta() == CATA_CERR) {
-//                hora1 = itemVehi.get(i).getHoraSaliRealItin();
-//                hora2 = itemVehi.get(i).getHoraLlegRealItin();
-//            } else {
-//
-//            }
-//        }
 
         RecpNavHistService histService = new RecpNavHistService();
         List<SfmoHistReceNave> itemTotalReco;
-        itemTotalReco = histService.listCicloReco(hora1, hora2, idVehiculo);
+        itemTotalReco = histService.listCicloReco(salidaReal, llegadaReal, ID_VEHI);
+        System.out.println("NO. del HIST_RECV_NAVE EN ESA FECHA:" + itemTotalReco.size());
 
-        double lat1 = 0; //primer registro
-        double longt = 0; //segundo registro
-
-        double lat2 = 0; //ultimo registro 
-        double longt2 = 0; //ultimo registro 
-
-        //Recorro lista de los datos del historico para irlos sumando
-//        if (!itemTotalReco.isEmpty()) {
-//
-//            //la primera latitud y longitud las tomo de la posición inicial 
-//            lat1 = itemTotalReco.get(0).getLatiReceNave();
-//            longt = itemTotalReco.get(0).getLongReceNave();
-//
-//            for (int j = 0; j < itemTotalReco.size(); j++) {
-//
-//                //Las ultimas latitudes y longitudes las tomo de la posicion final   
-//                if (j + 1 == itemTotalReco.size()) {
-//                    lat2 = itemTotalReco.get(j).getLatiReceNave();
-//                    longt2 = itemTotalReco.get(j).getLongReceNave();
-//                }
-//            }
-//
-//            //Cuando termine de recorer entonces ya mando los datos a la formula 
-//            suma = calcularDistanciaEntreDosPuntos(lat1, longt2, lat2, longt2);
-//            suma = suma / 1000;
-//            System.out.println("La Suma Final es" + " " + suma);
-//
-//            vehiIti.updateKmRecorridos(idVehiculo, hora1, hora2, suma);
-//
-//        } else {
-//            System.out.println("Lista vacia");
-//        }
-        if (!itemTotalReco.isEmpty()) {
+        if (itemTotalReco.size() >= 2) {
             double lat3 = 0;
             double longt3 = 0;
-            double lat4 = 0;
-            double longt4 = 0;
             double aux = 0;
-            double limit = 0.10;
 
-            for (int j = 0; j < itemTotalReco.size(); j++) {
-
-                //llenar uno 
-                if (lat3 > 0) {
-                    lat3 = lat4;
-                    longt3 = longt4;
+            for (SfmoHistReceNave historialRECVNAV : itemTotalReco) {
+                if (lat3 == 0 && longt3 == 0) {
+                    lat3 = historialRECVNAV.getLatiReceNave();
+                    longt3 = historialRECVNAV.getLongReceNave();
                 } else {
-                    lat3 = itemTotalReco.get(j).getLatiReceNave();
-                    longt3 = itemTotalReco.get(j).getLongReceNave();
-                    j++;
+                    aux = calcularDistanciaEntreDosPuntos(
+                            lat3,longt3,historialRECVNAV.getLatiReceNave(),historialRECVNAV.getLongReceNave() ) ;
+                    lat3 = historialRECVNAV.getLatiReceNave();
+                    longt3 = historialRECVNAV.getLongReceNave();
                 }
-                if (j == itemTotalReco.size()) {
-
-                } else {
-                    //llenar 2 
-                    lat4 = itemTotalReco.get(j).getLatiReceNave(); //2
-                    longt4 = itemTotalReco.get(j).getLongReceNave();
-
-                    //Calcular distancia                  
-                    aux = calcularDistanciaEntreDosPuntos(lat3, longt3, lat4, longt4);
-                    aux = aux / 1000;
-                    System.out.println("Imprimo los auxiliares" + " " + aux);
-                    if (aux > limit) {
-
-                    } else {
-                        suma2 += aux;
-                    }
-                }
+                kilometrosReco += aux;
+                System.out.println("AUX:" + kilometrosReco);
+                
             }
 
-            //Actualiza vehiculo 
-//            vehiIti.updateKmRecorridos(idVehiculo, hora1, hora2, suma2);
-
         } else {
-            System.out.println("Lista Vacia");
+            return 0.0;
         }
         return kilometrosReco;
     }
     
-    public double calcularDistanciaEntreDosPuntos(double lat1, double lng1,
+    public static double calcularDistanciaEntreDosPuntos(double lat1, double lng1,
             double lat2, double lng2) {
         double earthRadius = 6371; // Radio de la tierra en kilometros
         lat1 = Math.toRadians(lat1);

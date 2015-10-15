@@ -1,9 +1,9 @@
 package com.mx.teknei.mrn.socket.server.tcp;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.mx.teknei.pcabordo.lib.entities.SfmoHistReceNave;
+import com.mx.teknei.pcabordo.lib.service.impl.RecpNavHistService;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author HEYDRICH ABRAHAM ENCISO - [haenciso@teknei.com.mx]
@@ -13,99 +13,79 @@ import java.util.Date;
 public class prueba {
 
 //    public static void main(String[] args) {
-        //Servicio horario operativo
-//        List<SfmoHoraSeop> horaOperLista = new SfmoHoraSeopService().ListarHoraSeOp();
-//        DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-//        DateUtil util = new DateUtil();
-//        for (SfmoHoraSeop horaOperLista1 : horaOperLista) {
-//            System.out.println("------------------------------------------------");
-//            /////////////////////////----inicio----------------
-//            System.out.println("1:-"+horaOperLista1.getHoraInicOper());
-//            System.out.println("1----Hora Mas Cinto"+util.sumarRestarHorasFecha(horaOperLista1.getHoraInicOper(), 5).toString());
-//            System.out.println("1----Hora MENIOS Cinto"+util.sumarRestarHorasFecha(horaOperLista1.getHoraInicOper(), -5).toString());
-////            String[] dia = horaOperLista1.getHoraInicOper().toString().split(" ");
-////            System.out.println(dia[0]);
-////            System.out.println(dia[1]);
-////            Date dat1;
-////            try {
-////                dat1 = dateFormat.parse(dia[1]);
-////            } catch (ParseException ex) {
-////                System.out.println("Error en Date [1]");
-////                dat1 = new Date();
-////            }
-//            
-//            ////////////////////////------fin-----------------
-//            System.out.println("2:-"+horaOperLista1.getHoraFinOper());
-////            String[] dia2 = horaOperLista1.getHoraFinOper().toString().split(" ");
-////            System.out.println(dia2[0]);
-////            System.out.println(dia2[1]);
-////            Date dat2;
-////            try {
-////                dat2 = dateFormat.parse(dia2[1]);
-////            } catch (ParseException ex) {
-////                System.out.println("Error en data2 [1]");
-////                dat2 = new Date();
-////            }
-//            ///////////////////////-----fecha actual-----------------
-//            Date fechaActualORI = new Date();
-//            fechaActualORI.setHours(03);
-//            fechaActualORI.setMinutes(00);
-//            fechaActualORI.setSeconds(00);
-//            System.out.println("3:-"+fechaActualORI);
-////            try {
-////                fechaActualORI = dateFormat.parse("14:30:00");
-////                System.out.println("3:-"+fechaActualORI);
-////            } catch (ParseException ex) {
-////                System.out.println("Error en Date [1]");
-////                fechaActualORI = new Date();
-////            }
-//            System.out.println("REGRESA:"+util.comparetoHorsOpe(horaOperLista1.getHoraInicOper(), horaOperLista1.getHoraFinOper(), fechaActualORI));
-//            Date dateOne = util.sumarRestarHorasFecha(fechaActualORI, 5);
-////            System.out.println("----Hora Mas Cinto"+dateOne.toString());
-////            Date dateTwo = util.sumarRestarHorasFecha(fechaActualORI, -5);
-////            System.out.println("----Hora MENIOS Cinto"+dateTwo.toString());
-////            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-////            try {
-////                Date fromDate = df.parse(dateOne.toString());
-////                System.out.println("+++Hora1:"+fromDate);
-////                Date toDate = df.parse(dateTwo.toString());
-////                System.out.println("+++Hora2:"+toDate);
-////            } catch (Exception e) {
-////                e.printStackTrace();
-////            }
-//        }
-// ********************************************************************************************************************************
-//        Date fechaActual = new Date();
-//        fechaActual.setDate(07);
-//        fechaActual.setHours(05);
-//        System.out.println(fechaActual);
-//        Date fechaMasCinco = new DateUtil().sumarRestarHorasFecha(fechaActual, 5);
-//        Date fechaMenosCinco = new DateUtil().sumarRestarHorasFecha(fechaActual, -5);
-//        ISfpfItinService itinService = new SfpfItinService();
-//        List<SfpfItin> itinList = itinService.ObtenerItinEntreRangoFecha(new DateUtil().convertirFormatoDate(fechaMenosCinco),new DateUtil().convertirFormatoDate(fechaMasCinco),2,1 );
-//        System.out.println("NO:"+itinList.size());
-//        for (SfpfItin itinList1 : itinList) {
-//            System.out.println(itinList1.getIdItin());
-//        }
-//        System.out.println("1:"+itinList.get(0).getIdItin());
-//////**************************************************************************************
-//        ISfpfItinService itinService = new SfpfItinService();
-//        SfpfItin intiEnty = itinService.BuscarItinPorID(2);
-//        System.out.println("INCIO:"+intiEnty.getIdItin());
-        
-//        Date nuevoDia = new Date(2015, 9, 12, 01, 12);
-//        Date nuevoDia = new Date();
-//        System.out.println("Dia de hoy:" + nuevoDia);
-//        DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-//        Date fechaActual;
-//        try {
-//            fechaActual = dateFormat.parse(dateFormat.format(nuevoDia));
-//            System.out.println("Dia con FORMATO:"+fechaActual);
-//        } catch (ParseException ex) {
-//            System.out.println("Error en dia ahora");
-//            fechaActual = new Date();
-//        }
+//        //Llegada
+//        Date horaLLegReal = new Date();
+//        horaLLegReal.setHours(17);
+//        horaLLegReal.setMinutes(00);
+//        horaLLegReal.setSeconds(00);
+//        System.out.println("Hora LLEGADA:" + horaLLegReal);
+//        //Salida
+//        Date horaSaliReal = new Date();
+//        horaSaliReal.setHours(18);
+//        horaSaliReal.setMinutes(00);
+//        horaSaliReal.setSeconds(00);
+//        System.out.println("Hora SALIDA:" + horaSaliReal);
+//        /////Mandar a llamar el METODO POMPIS
+//        double varKM = KilometrosRecorridos(horaSaliReal.getTime(), horaLLegReal.getTime(), 111);
+//        System.out.println("KM--TOTAL" + varKM);
 //
+//    }
+//
+//    public static Double KilometrosRecorridos(Long salidaReal, Long llegadaReal, int ID_VEHI) {
+//        //KILOMETROS RECORRIDOS QUE REGRESA 
+//        double kilometrosReco = 0;
+//
+//        RecpNavHistService histService = new RecpNavHistService();
+//        List<SfmoHistReceNave> itemTotalReco;
+//        itemTotalReco = histService.listCicloReco(salidaReal, llegadaReal, ID_VEHI);
+//        System.out.println("NO. del HIST_RECV_NAVE EN ESA FECHA:" + itemTotalReco.size());
+//
+//        if (itemTotalReco.size() >= 2) {
+//            double lat3 = 0;
+//            double longt3 = 0;
+////            double lat4 = 0;
+////            double longt4 = 0;
+//            double aux = 0;
+//            double limit = 0.10;
+//
+//            for (SfmoHistReceNave historialRECVNAV : itemTotalReco) {
+//                if (lat3 == 0 && longt3 == 0) {
+//                    lat3 = historialRECVNAV.getLatiReceNave();
+//                    longt3 = historialRECVNAV.getLongReceNave();
+//                } else {
+//                    aux = calcularDistanciaEntreDosPuntos(
+//                            lat3,longt3,historialRECVNAV.getLatiReceNave(),historialRECVNAV.getLongReceNave() ) ;
+//                    lat3 = historialRECVNAV.getLatiReceNave();
+//                    longt3 = historialRECVNAV.getLongReceNave();
+//                }
+//                kilometrosReco += aux;
+//                System.out.println("AUX:" + kilometrosReco);
+//                
+//            }
+//
+//        } else {
+//            return 0.0;
+//        }
+//        return kilometrosReco;
+//    }
+//
+//    public static double calcularDistanciaEntreDosPuntos(double lat1, double lng1,
+//            double lat2, double lng2) {
+//        double earthRadius = 6371; // Radio de la tierra en kilometros
+//        lat1 = Math.toRadians(lat1);
+//        lng1 = Math.toRadians(lng1);
+//        lat2 = Math.toRadians(lat2);
+//        lng2 = Math.toRadians(lng2);
+//        double dLon = (lng2 - lng1);
+//        double dLat = (lat2 - lat1);
+//        double sinlat = Math.sin(dLat / 2);
+//        double sinlon = Math.sin(dLon / 2);
+//        double a = (sinlat * sinlat) + Math.cos(lat1) * Math.cos(lat2)
+//                * (sinlon * sinlon);
+//        double c = 2 * Math.asin(Math.min(1.0, Math.sqrt(a)));
+//        double distancia = earthRadius * c * 1000;
+//
+//        return distancia;
 //    }
 
 }

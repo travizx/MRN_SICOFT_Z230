@@ -6,7 +6,7 @@ import com.mx.teknei.mrn.DTO.TramaINITDTO;
 import java.util.Date;
 
 /**
- * @author HEYDRICH ABRAHAM ENCISO - [haenciso@teknei.com.mx]
+ * @author Hey
  * @date 3/10/2015
  * @class DecodeTrama
  */
